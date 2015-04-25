@@ -6,14 +6,6 @@ def compare(a,b):
     x=[max(a[i],b[i])-min(a[i],b[i]) for i in range(0,len(a))]
     return sum(x), b
 def init(x):
-    img = Image.open(str(x) + '.png')
-    arr = array(img)
-    new_arr=list(itertools.chain(*arr)) # flattens arr into a 1d array
-    # example -> [[3,4],[2,3]] -> [3,4,2,3]
-    av_arr=[list(i) for i in new_arr]
-    av_arr=[sum(x)/len(x) for x in av_arr]
-    return av_arr
-def process(x):
     img = Image.open(x)
     arr = array(img)
     new_arr=list(itertools.chain(*arr)) # flattens arr into a 1d array
@@ -22,8 +14,8 @@ def process(x):
     av_arr=[sum(x)/len(x) for x in av_arr]
     return av_arr
 def main(input_file):
-    arr=[init(i) for i in range(0,10)]
-    in_arr=process(input_file)
+    arr=[init(str(i)+'.png') for i in range(0,10)]
+    in_arr=init(input_file)
     minimum=compare(in_arr,arr[0])
     for x in arr:
         if compare(in_arr, x)[0] < minimum[0]:
