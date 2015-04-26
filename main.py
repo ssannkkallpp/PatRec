@@ -3,10 +3,11 @@ from numpy import *
 from itertools import *
 import itertools
 def compare(a,b):
-    x=[max(a[i],b[i])-min(a[i],b[i]) for i in range(0,len(a))]
+    x=[max(a[i],b[i])-min(a[i],b[i]) ** 2 for i in range(0,len(a))]
     return sum(x), b
 def init(x):
     img = Image.open(x)
+    img.size=(150,150)
     arr = array(img)
     new_arr=list(itertools.chain(*arr)) # flattens arr into a 1d array
     # example -> [[3,4],[2,3]] -> [3,4,2,3]
@@ -20,5 +21,5 @@ def main(input_file):
     for x in arr:
         if compare(in_arr, x)[0] < minimum[0]:
             minimum=compare(in_arr,x)
-    return minimum[-1]
+    return arr.index(minimum[-1])
 print main("/Users/sankalpyohanramesh/Google Drive/numset/testset/Impact1.png")
