@@ -2,9 +2,7 @@ from PIL import Image
 from numpy import *
 from itertools import *
 import itertools
-from sys import *
-import sys
-
+import numpy as np
 def init(x):
     img = Image.open(x)
     img.size=(150,150)
@@ -16,17 +14,12 @@ def init(x):
     return av_arr
 def main(input_file):
     arr=[init(str(i)+'.png') for i in range(1,6)]
-    arr=array(arr)
-    in_ar=init(input_file)
-    loc_globe=arr * arr.transpose()
-    for i in range(0,51):
-        x=loc_globe * x
-        total=0
-        for j in itertools.chain(*x):
-            total+=j**2
-        x=x/total
-    y=a.transpose() * x
-    final_arr=[y*m for m in arr]
-    final_in = y * in_arr
-    return final_arr, final_in                                                                                                                
-print main(sys.argv[-1])
+    # arr is the 2d matrix with each row representing one of the 5 images.
+    in_arr=init(input_file)
+    arr_transpose=[list(i) for i in zip(*arr)]
+    arr, arr_transpose=np.matrix(arr), np.matrix(arr_transpose)
+    x=array([1,0,0,0])
+    val=arr * arr_transpose
+    val=array(val)
+    return val * x
+print main("/Users/sankalpyohanramesh/Google Drive/numset/testset/I1.png")
