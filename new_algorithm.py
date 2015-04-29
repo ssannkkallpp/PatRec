@@ -1,8 +1,19 @@
 from PIL import Image
 from numpy import *
 from itertools import *
+from itertools import product
 import itertools
 import numpy as np
+def multiply( mtx_a, mtx_b):
+    tpos_b = zip( *mtx_b)
+    rtn = [[ sum( ea*eb for ea,eb in zip(a,b)) for b in tpos_b] for a in mtx_a]
+    return rtn
+def divide(a,b):
+    a=np.array(a)
+    np.seterr(divide='ignore', invalid='ignore')
+    b=b+0.0
+    y=a/b
+    return y.tolist()
 def init(x):
     img = Image.open(x)
     img.size=(75,75)
@@ -17,15 +28,14 @@ def main(input_file):
     # arr is the 2d matrix with each row representing one of the 5 images.
     in_arr=init(input_file)
     arr_transpose=[list(i) for i in zip(*arr)]
-    arr, arr_transpose=np.matrix(arr), np.matrix(arr_transpose)
-    val = arr * arr_transpose
-    x=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[1,0,0,0,0]]
-    x=np.array(x)
+    val=multiply(arr,arr_transpose)
+    x=[[1,0],[0,0]]
     for i in range(0,51):
-        x=np.dot(val,x)
-        x,total=array(x), 0
+        x=multiply(val,x)
+        total=0
         for m in list(itertools.chain(*x)):
-            total+=m**2
-        x=x/total
-    pass
+            total+=m
+        x=divide(x,total)
+    y=multiply(arr_transpose,x)
+    final_arr=[multiply(y,arr[i]) for i in range(0,len(arr))]
 print main("/Users/sankalpyohanramesh/Google Drive/numset/testset/I1.png")
