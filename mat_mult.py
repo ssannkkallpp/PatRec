@@ -1,17 +1,38 @@
-from itertools import product
-def multiply(matr_a, matr_b):
-    """Return product of an MxP matrix A with an PxN matrix B."""
-    cols, rows = len(matr_b[0]), len(matr_b)
-    resRows = xrange(len(matr_a))
-    rMatrix = [[0] * cols for _ in resRows]
-    for idx in resRows:
-        for j, k in product(xrange(cols), xrange(rows)):
-            rMatrix[idx][j] += matr_a[idx][k] * matr_b[k][j]
-    return rMatrix
-def MatrixMul( mtx_a, mtx_b):
-    tpos_b = zip( *mtx_b)
-    rtn = [[ sum( ea*eb for ea,eb in zip(a,b)) for b in tpos_b] for a in mtx_a]
-    return rtn
-x=[[2,3],[3,4]]
-y=[[1,2],[2,3]]
-print MatrixMul(x,y)
+def dp(a,b):
+    sum=0
+    for i in range(len(a)):
+        sum=sum+a[i]*b[i]
+    return sum
+def transpose(a):
+    return [list(i) for i in zip(*a)]
+def matmult(a,b):
+    result=[]
+    try:
+        b=transpose(b)
+        for aa in a:
+            initial=[]
+            for bb in b:
+                initial.append(dp(aa,bb))
+            result.append(initial)
+        return result
+    except:        
+        # if it gets here then implies that b is a 1d array
+        try:
+            for i in a:
+                result.append(dp(i,b)) # for each a[i], find the dot product with b
+            return result
+        except:
+            return dp(a,b)
+def magic(number):
+    try:
+        return float(''.join(str(i) for i in number))
+    # example -> x=[2,3] -> '23' -> 23
+    except:
+            return int(''.join(str(i) for i in number))
+def result(a,b):
+    # b must be an element in a
+    a=sorted(a)
+    if abs(b - (a[a.index(b)-1])) < abs(b - (a[a.index(b)+1])):
+        return a.index(b)-1
+    return a.index(b)+1
+# All function in this file have been certified!
