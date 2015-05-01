@@ -1,25 +1,29 @@
-from PIL import Image
-from numpy import *
-from itertools import *
-import itertools
-def compare(a,b):
-    x=[max(a[i],b[i])-min(a[i],b[i]) ** 2 for i in range(0,len(a))]
-    return sum(x), b
-def init(x):
-    img = Image.open(x)
-    img.size=(150,150)
-    arr = array(img)
-    new_arr=list(itertools.chain(*arr)) # flattens arr into a 1d array
-    # example -> [[3,4],[2,3]] -> [3,4,2,3]
-    av_arr=[list(i) for i in new_arr]
-    av_arr=[sum(x)/len(x) for x in av_arr]
-    return av_arr
+import modules
+import init
+import matmult
 def main(input_file):
-    arr=[init(str(i)+'.png') for i in range(0,10)]
-    in_arr=init(input_file)
-    minimum=compare(in_arr,arr[0])
-    for x in arr:
-        if compare(in_arr, x)[0] < minimum[0]:
-            minimum=compare(in_arr,x)
-    return arr.index(minimum[-1])
-print main("/Users/sankalpyohanramesh/Google Drive/numset/testset/Impact1.png")
+    #---------------------------------------------#
+    arr=[init.init(str(i) + '.png') for i in range(1,6)]
+    arr_transpose=matmult.transpose(arr)
+    val=matmult.matmult(arr, arr_transpose)
+    #---------------------------------------------#
+    in_arr=init.init(input_file)
+    in_arr=[float(i) for i in in_arr]
+    x=[0 for i in range(len(arr)-1)]
+    x.append(1)
+    #---------------------------------------------#
+    for i in range(0,3):
+        x=matmult.matmult(val, x)
+        x=[float(m) for m in x]
+        # x is an array/vector of floats
+        total=[m**2 for m in x]
+        x=init.divide(x,sum(total))
+    #---------------------------------------------#
+    y=matmult.matmult(arr_transpose,x)
+    y=[float(i) for i in y]
+    #---------------------------------------------#
+    final=[matmult.dp(y,i) for i in arr]
+    final.append(matmult.dp(y,in_arr))
+    final_in=matmult.dp(y,in_arr)
+    return matmult.result(final, final_in)
+print main("/Users/sankalpyohanramesh/Google Drive/numset/testset/I1.png")
