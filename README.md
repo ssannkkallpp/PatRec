@@ -4,4 +4,5 @@ This is a pattern recognition library, where you specify a testset of images and
 
 import backup
 obj=Init(["my.png", "his.png"])
+
 obj.recognize("third_image.png")
