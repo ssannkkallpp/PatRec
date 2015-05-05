@@ -28,6 +28,3 @@ class Init(object):
         final_in=matmult.dp(y,in_arr)
         output=matmult.result(final, final_in)
         return images[final.index(final[output])]
-images=["sahana2.png", "sankalp1.png"]
-test_obj=Init(images)
-print test_obj.recognize("sahana1.png")
