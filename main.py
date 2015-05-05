@@ -28,3 +28,5 @@ class Init(object):
         final_in=matmult.dp(y,in_arr)
         output=matmult.result(final, final_in)
         return images[final.index(final[output])]
+example=Init(["Image1.png", "Image2.png"])
+print example.recongize("Image3.png")
