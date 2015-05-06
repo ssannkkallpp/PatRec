@@ -1,41 +1,28 @@
-from PIL import Image
-from numpy import *
-from itertools import *
-from itertools import product
-import itertools
-import numpy as np
-def multiply( mtx_a, mtx_b):
-    tpos_b = zip( *mtx_b)
-    rtn = [[ sum( ea*eb for ea,eb in zip(a,b)) for b in tpos_b] for a in mtx_a]
-    return rtn
-def divide(a,b):
-    a=np.array(a)
-    np.seterr(divide='ignore', invalid='ignore')
-    b=b+0.0
-    y=a/b
-    return y.tolist()
-def init(x):
-    img = Image.open(x)
-    img.size=(75,75)
-    arr = array(img)
-    new_arr=list(itertools.chain(*arr)) # flattens arr into a 1d array
-    # example -> [[3,4],[2,3]] -> [3,4,2,3]
-    av_arr=[list(i) for i in new_arr]
-    av_arr=[sum(x)/len(x) for x in av_arr]
-    return av_arr
-def main(input_file):
-    arr=[init(str(i)+'.png') for i in range(1,6)]
-    # arr is the 2d matrix with each row representing one of the 5 images.
-    in_arr=init(input_file)
-    arr_transpose=[list(i) for i in zip(*arr)]
-    val=multiply(arr,arr_transpose)
-    x=[[1,0],[0,0]]
-    for i in range(0,51):
-        x=multiply(val,x)
-        total=0
-        for m in list(itertools.chain(*x)):
-            total+=m
-        x=divide(x,total)
-    y=multiply(arr_transpose,x)
-    final_arr=[multiply(y,arr[i]) for i in range(0,len(arr))]
-print main("/Users/sankalpyohanramesh/Google Drive/numset/testset/I1.png")
+import modules
+import init
+import matmult
+import pickle
+class Init(object):
+    def __init__(self):
+        self.arr=[[0,1,0,0,1,0,0,1,0], [0,0,0,1,1,1,0,0,0], [1,0,1,0,0,0,1,0,1]]
+    def recognize(self, input_file):
+        arr_transpose=matmult.transpose(self.arr)   
+        val=matmult.matmult(self.arr, arr_transpose)
+        in_arr=input_file
+        in_arr=[float(i) for i in in_arr]
+        x=[0 for i in range(len(self.arr)-1)]
+        x.append(1)
+        for i in range(0,50):
+            x=matmult.matmult(val, x)
+            x=[float(m) for m in x]
+            total=[m**2 for m in x]
+            x=init.divide(x,sum(total))
+        y=matmult.matmult(arr_transpose,x)
+        y=[float(i) for i in y]
+        final=[matmult.dp(y,i) for i in self.arr]
+        final.append(matmult.dp(y,in_arr))
+        final_in=matmult.dp(y,in_arr)
+        output=matmult.result(final, final_in)
+        return self.arr[final.index(final[output])]
+obj=Init()
+print obj.recognize([0,0,0,0,1,1,0,0,0])
